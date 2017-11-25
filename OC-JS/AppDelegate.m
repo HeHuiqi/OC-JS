@@ -17,7 +17,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-    
+    NSLog(@"====%@",[NSProcessInfo processInfo].processName);
     self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
     JsocVC *controller = [[JsocVC alloc] init];
     UINavigationController *nava = [[UINavigationController alloc]initWithRootViewController:controller];
