@@ -30,7 +30,7 @@
 
     function callNativeMethod() {
         console.log("ovNative---");
-        //OCObject在OC端定义的对象completeOpen()方法是OC实现JSExport协议的方法
+        //OCObject在iOS端定义的对象completeOpen()方法是OC实现JSExport协议的方法
         OCObject.completeOpen();
     }
 
@@ -40,6 +40,7 @@
     });
 
     $('.o-btn3').click(function(){
+        //这里的参数将会传递到iOS端
         OCObject.showAlertMsgButtonTitle('注意','请核对信息','确定');
     });
 
