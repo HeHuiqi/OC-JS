@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JS-OC</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <script src="jquery-1.10.1.min.js"></script>
+
+    <style type="text/css">
+        .btn{
+            background-color: #3eacff;
+            width: auto;
+            height: 30px;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 20px;
+            border: 0px;
+            border-radius: 5px;
+
+        }
+        a{
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 30px;
+            text-decoration: none;
+        }
+
+    </style>
+
+    <script type="text/javascript">
+
+        function getToken(token) {
+            alert("js-alert-" + token);
+            console.log("js=="+token);
+        }
+        function appToken(){
+            alert('app');
+        }
+
+    </script>
+</head>
+<body>
+<button type="button" class="btn" onclick="appToken()">js调用原生方法</button>
+<br/><br/>
+<a type="button" class='home' href="home.html" >首页</a>
+
+</body>
+</html>
+
