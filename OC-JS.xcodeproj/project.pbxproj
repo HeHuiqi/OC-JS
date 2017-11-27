@@ -187,7 +187,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "open -R ${BUILD_DIR}\n\n\n";
+			shellScript = "\ncd ${BUILD_DIR}/${CONFIGURATION}-iphoneos\n#${PROJECT_NAME}是Xcode的一个环境变量\nPAYLOAD='Payload'\n\n# 这里的-d 参数判断$PAYLOAD是否存在\nif [ ! -d \"$PAYLOAD\" ]\nthen\nmkdir $PAYLOAD\nfi\ncp -r ./${PROJECT_NAME}.app $PAYLOAD\nzip -q -r ${PROJECT_NAME}.ipa $PAYLOAD\n#在Finder中打开，在使用中可暂时注释掉避免每次都打开\n#open -R .\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

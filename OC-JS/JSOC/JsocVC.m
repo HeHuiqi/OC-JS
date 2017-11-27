@@ -51,6 +51,7 @@
     JSValue *function = self.context[@"getToken"];
     //调用方法并传递参数
     [function callWithArguments:@[@"1234567890"]];
+    
 }
 #pragma mark -
 - (void)webViewDidFinishLoad:(UIWebView *)webView
