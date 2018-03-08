@@ -58,7 +58,7 @@
 {
     self.context =[webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
     
-    //self.context[@"OCObject"] = _ocObj;
+    //self.context[@"OCObject"] = self;
     /*将OC对象传递给JS，然后js就可以直接用OCObject来调用实现JSExport
     协议的方法，在js中的方法如下：
      callNativeMethod自己起名
