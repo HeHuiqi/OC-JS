@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "JsocVC.h"
+#import "HqWebVC.h"
 @interface AppDelegate ()
 
 @end
@@ -17,9 +17,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-    NSLog(@"====%@",[NSProcessInfo processInfo].processName);
+//    NSLog(@"====%@",[NSProcessInfo processInfo].processName);
     self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
-    JsocVC *controller = [[JsocVC alloc] init];
+    HqWebVC *controller = [[HqWebVC alloc] init];
     UINavigationController *nava = [[UINavigationController alloc]initWithRootViewController:controller];
     
     

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <script src="jquery-1.10.1.min.js"></script>
+    <style type="text/css">
+        .o-btn1,
+        .o-btn2,
+        .o-btn3 {
+            background-color: #2c9dff;
+            width: auto;
+            height: 30px;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 20px;
+            border: 0px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <button type="button" class='o-btn1'>通过JSExport协议调用OC方法</button>
+    <br><br>
+    <button type="button" class='o-btn2'>通过JSExport协议调用OC单参方法</button>
+    <br><br>
+    <button type="button" class='o-btn3'>通过JSExport协议调用OC多参方法</button>
+    <script type="text/javascript">
+
+        $('.o-btn1').click(function () {
+            //NativeObject在iOS端定义的对象实现JSExport协议的
+            // - (void)completeOpen;方法
+            console.log("调用Native方法completeOpen()");
+            NativeObject.completeOpen();
+        });
+
+        $('.o-btn2').click(function () {
+            //NativeObject在iOS端定义的对象实现JSExport协议的
+            // - (void)getUserInfo:(NSString *)name;方法
+            NativeObject.getUserInfo("孙悟空");
+        });
+
+        $('.o-btn3').click(function () {
+            //NativeObject在iOS端定义的对象实现JSExport协议的
+            // - (void)showAlert:(NSString *)title msg:(NSString *)msg buttonTitle:(NSString*)btnTitle;方法
+            //这里的参数将会传递到iOS端,主要js调用方法名的拼写
+            NativeObject.showAlertMsgButtonTitle('注意', '请核对信息', '确定');
+        });
+        //这个方法让OC老调用
+        function requestUserInfo(userId) {
+            alert("请求用户信息:"+userId)
+        }
+
+    </script>
+
+</body>
+
+</html>

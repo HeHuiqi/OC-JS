@@ -17,30 +17,32 @@
             border-radius: 5px;
 
         }
-        a{
-            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-            font-size: 30px;
-            text-decoration: none;
-        }
 
     </style>
 
-    <script type="text/javascript">
 
-        function getToken(token) {
-            alert("js-alert-" + token);
-            console.log("js=="+token);
-        }
-        function appToken(){
-            alert('app');
-        }
-
-    </script>
 </head>
 <body>
-<button type="button" class="btn" onclick="appToken()">js调用原生方法</button>
-<br/><br/>
-<a type="button" class='home' href="home.html" >首页</a>
+<button type="button" class="btn">js调用原生方法</button>
+
+<script type="text/javascript">
+
+    function getToken(token) {
+        alert("js-alert-" + token);
+        console.log("js=="+token);
+    }
+    function appToken(){
+        alert('app');
+    }
+
+
+    $('.btn').click(function () {
+
+        window.webkit.messageHandlers.HqGetUserInfo.postMessage('{"name:"王小二"}');
+        // console.log("dgsdgds");
+    });
+
+</script>
 
 </body>
 </html>
