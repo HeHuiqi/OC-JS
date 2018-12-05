@@ -52,7 +52,7 @@
     }
     return _webView;
 }
-#pragma mark
+#pragma mark -  UIWebViewDelegate
 - (void)webViewDidFinishLoad:(UIWebView *)webView{
     self.context =[webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
     
