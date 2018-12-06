@@ -7,8 +7,8 @@
 //
 
 #import "HqWebVC.h"
-#import "HqUIWebView/HqWKWebViewVC.h"
-#import "HqWKWebView/HqUIWebViewVC.h"
+#import "HqWKWebViewVC.h"
+#import "HqUIWebViewVC.h"
 @interface HqWebVC ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic,strong) NSArray *titles;

@@ -6,7 +6,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
     <script src="jquery-1.10.1.min.js"></script>
-
     <style type="text/css">
         .btn2,
         .btn {
@@ -26,27 +25,26 @@
 
 <body>
     <button type="button" class="btn">js调用原生方法</button>
+    <br>
+    <br>
     <button type="button" class="btn2">js调用原生方法2</button>
 
 
     <script type="text/javascript">
-        function getToken(token) {
-            alert("js-alert-" + token);
-            console.log("js==" + token);
-        }
-
-        function appToken() {
-            alert('app');
-        }
-
-
         $('.btn').click(function () {
 
-            window.webkit.messageHandlers.HqGetUserInfo.postMessage('{"name:"王小二"}');
-            // console.log("dgsdgds");
+            //(messageId, params, callBack) callBack可不传递
+            HqJsHandler.callNative("userInfo", {"name": "王小二"});
         });
         $('.btn2').click(function () {
-            HqJsHandler.callNative();
+            //(messageId, params, callBack) callBack可不传递
+            HqJsHandler.callNative("homeList", {
+                "pageCount": 10
+            }, function (response) {
+                console.log(response);
+                alert(JSON.stringify(response));
+            });
+
         });
     </script>
 

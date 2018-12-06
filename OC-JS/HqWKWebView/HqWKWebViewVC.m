@@ -8,13 +8,15 @@
 
 #import "HqWKWebViewVC.h"
 #import <WebKit/WebKit.h>
-#import "HqWKController.h"
+#import "HqHandler.h"
 
-#define HqGetUserInfo @"HqGetUserInfo"
+#define HqGetUserInfo @"userInfo"
 
-@interface HqWKWebViewVC ()<WKScriptMessageHandler>
+@interface HqWKWebViewVC ()<WKUIDelegate>
 
 @property (nonatomic,strong) WKWebView *webView;
+@property (nonatomic,strong) WKWebViewConfiguration *config;
+@property (nonatomic,strong) HqHandler *hqHandler;
 
 @end
 
@@ -36,6 +38,37 @@
     }
     
 }
+
+
+- (WKWebView *)webView{
+    if (!_webView) {
+        WKWebViewConfiguration *config = [[WKWebViewConfiguration alloc] init];
+        WKUserContentController *HqWKC = [[WKUserContentController alloc] init];
+        config.userContentController = HqWKC;
+        _webView = [[WKWebView alloc] initWithFrame:self.view.bounds configuration:config];
+        _webView.UIDelegate = self;
+    }
+    return _webView;
+}
+- (HqHandler *)hqHandler{
+    if (!_hqHandler) {
+        _hqHandler = [[HqHandler alloc] init];
+        [_hqHandler hqJsHandlerWithWebView:self.webView];
+    }
+    return _hqHandler;
+}
+- (void)hqGetUserInfo:(NSDictionary *)params{
+    NSLog(@"获取用户信息");
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"获取信息" message:params[@"name"] delegate:nil cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+    [alert show];
+}
+#pragma mark - WKUIDelegate
+- (void)webView:(WKWebView *)webView runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(void))completionHandler{
+
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:message delegate:nil cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+    [alert show];
+    completionHandler();
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title  = @"WKWebView";
@@ -44,59 +77,26 @@
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL fileURLWithPath:path]];
     [self.webView loadRequest:request];
     [self.view addSubview:self.webView];
-   
+    
     [self deleteCache];
-
-}
-- (WKWebView *)webView{
-    if (!_webView) {
-        WKWebViewConfiguration *config = [[WKWebViewConfiguration alloc] init];
-        WKUserContentController *HqWKC = [[WKUserContentController alloc] init];
-        [HqWKC addScriptMessageHandler:self name:HqGetUserInfo];
+    
+    //处理事件
+    __weak typeof(self) weakSelf = self;
+    self.hqHandler.hqHandlerBlock = ^(NSString * _Nonnull messageId, id  _Nonnull params) {
         
-        /*
-        js端调用，注意postMessage不传参数的话要传一个空字符串如postMessage('')
-        MessageName要和这里的name参数设置一致
-        //window.webkit.messageHandlers.MessageName.postMessage('{"name:"王小二"}')
-        这里是：window.webkit.messageHandlers.HqGetUserInfo.postMessage('{"name:"王小二"}');
-        */
-        config.userContentController = HqWKC;
-        _webView = [[WKWebView alloc] initWithFrame:self.view.bounds configuration:config];
-        //log
-        [HqWKC addScriptMessageHandler:self name:@"log"];
-        //rewrite the method of console.log
-        NSString *jsCode = @"console.log = (function(logFunc){\
-        return function(str) {\
-        window.webkit.messageHandlers.log.postMessage(str);\
-        logFunc.call(console,str);\
-        }\
-        })(console.log);";
-        //injected the method when H5 starts to create the DOM tree
-        [config.userContentController addUserScript:[[WKUserScript alloc] initWithSource:jsCode injectionTime:WKUserScriptInjectionTimeAtDocumentStart forMainFrameOnly:YES]];
-    }
-    return _webView;
+        NSLog(@"Native正在处理......");
+        //执行你Native端的处理逻辑然后根据需要回调js端
+        if ([messageId isEqualToString:HqGetUserInfo]) {
+            [weakSelf hqGetUserInfo:params];
+        }else{
+            [weakSelf.hqHandler callbackJsWithResponse:@{@"data":@"life good!"}];
+        }
+        
+    };
+    //显示js端的log
+    [self.hqHandler showLog:self.webView];
+    
 }
-#pragma mark - WKScriptMessageHandler
-- (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message{
-    NSLog(@"message.body=%@",message.body);
-    NSLog(@"message.name=%@",message.name);
-    if ([message.name isEqualToString:HqGetUserInfo]) {
-        [self hqGetUserInfo];
-    }
-}
-- (void)hqGetUserInfo{
-    NSLog(@"获取用户信息");
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"获取用户信息" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
-    [alert show];
-}
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
