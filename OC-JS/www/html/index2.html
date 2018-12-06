@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>JS-OC</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -7,7 +8,8 @@
     <script src="jquery-1.10.1.min.js"></script>
 
     <style type="text/css">
-        .btn{
+        .btn2,
+        .btn {
             background-color: #3eacff;
             width: auto;
             height: 30px;
@@ -17,33 +19,37 @@
             border-radius: 5px;
 
         }
-
     </style>
 
 
 </head>
+
 <body>
-<button type="button" class="btn">js调用原生方法</button>
-
-<script type="text/javascript">
-
-    function getToken(token) {
-        alert("js-alert-" + token);
-        console.log("js=="+token);
-    }
-    function appToken(){
-        alert('app');
-    }
+    <button type="button" class="btn">js调用原生方法</button>
+    <button type="button" class="btn2">js调用原生方法2</button>
 
 
-    $('.btn').click(function () {
+    <script type="text/javascript">
+        function getToken(token) {
+            alert("js-alert-" + token);
+            console.log("js==" + token);
+        }
 
-        window.webkit.messageHandlers.HqGetUserInfo.postMessage('{"name:"王小二"}');
-        // console.log("dgsdgds");
-    });
+        function appToken() {
+            alert('app');
+        }
 
-</script>
+
+        $('.btn').click(function () {
+
+            window.webkit.messageHandlers.HqGetUserInfo.postMessage('{"name:"王小二"}');
+            // console.log("dgsdgds");
+        });
+        $('.btn2').click(function () {
+            HqJsHandler.callNative();
+        });
+    </script>
 
 </body>
-</html>
 
+</html>
