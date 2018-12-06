@@ -22,7 +22,6 @@
     NSString *path = [[NSBundle mainBundle] pathForResource:@"HqJsHandler" ofType:@"js"];
     NSString *jsHandlerCode = [[NSString alloc] initWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
     WKUserScript *usrScript = [[WKUserScript alloc] initWithSource:jsHandlerCode injectionTime:WKUserScriptInjectionTimeAtDocumentEnd forMainFrameOnly:YES];
-    
     [config.userContentController addUserScript:usrScript];
     
     [config.userContentController addScriptMessageHandler:self name:HqJsHanderName];

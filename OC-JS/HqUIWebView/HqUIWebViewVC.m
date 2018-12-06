@@ -21,11 +21,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title  = @"UIWebView";
-    [self.view addSubview:self.webView];
     NSString *htmlPath = @"www/html/index1";
     NSString *path = [[NSBundle mainBundle] pathForResource:htmlPath ofType:@"html"];
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL fileURLWithPath:path]];
     [self.webView loadRequest:request];
+    [self.view addSubview:self.webView];
+
     UIBarButtonItem *right = [[UIBarButtonItem alloc] initWithTitle:@"调用JS" style:UIBarButtonItemStylePlain target:self action:@selector(invokeJS)];
     self.navigationItem.rightBarButtonItem = right;
 }

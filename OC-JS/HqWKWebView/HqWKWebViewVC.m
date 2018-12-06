@@ -12,7 +12,7 @@
 
 #define HqGetUserInfo @"userInfo"
 
-@interface HqWKWebViewVC ()<WKUIDelegate>
+@interface HqWKWebViewVC ()<WKUIDelegate,WKNavigationDelegate>
 
 @property (nonatomic,strong) WKWebView *webView;
 @property (nonatomic,strong) WKWebViewConfiguration *config;
@@ -47,6 +47,7 @@
         config.userContentController = HqWKC;
         _webView = [[WKWebView alloc] initWithFrame:self.view.bounds configuration:config];
         _webView.UIDelegate = self;
+        _webView.navigationDelegate = self;
     }
     return _webView;
 }
@@ -61,6 +62,10 @@
     NSLog(@"获取用户信息");
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"获取信息" message:params[@"name"] delegate:nil cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
     [alert show];
+}
+#pragma mark - WKNavigationDelegate
+- (void)webView:(WKWebView *)webView didFinishNavigation:(null_unspecified WKNavigation *)navigation{
+
 }
 #pragma mark - WKUIDelegate
 - (void)webView:(WKWebView *)webView runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(void))completionHandler{
