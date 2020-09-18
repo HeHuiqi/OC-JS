@@ -37,12 +37,13 @@
             HqJsHandler.callNative("userInfo", {"name": "王小二"});
         });
         $('.btn2').click(function () {
-            //(messageId, params, callBack) callBack可不传递
+            //(messageId, params, callBack) callBack用于native端回调js
             HqJsHandler.callNative("homeList", {
                 "pageCount": 10
             }, function (response) {
-                console.log(response);
-                alert(JSON.stringify(response));
+                let resp = JSON.stringify(response)
+                console.log("resp:"+resp);
+                alert("JsAlert-native:"+resp);
             });
 
         });

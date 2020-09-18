@@ -97,13 +97,6 @@
 			path = HqHandler;
 			sourceTree = "<group>";
 		};
-		8E1471BF1FC900F700802E60 /* JSOC */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = JSOC;
-			sourceTree = "<group>";
-		};
 		8E3DF6ED1FC00D5B005AB32C = {
 			isa = PBXGroup;
 			children = (
@@ -126,7 +119,6 @@
 			children = (
 				15F0D73821B7B1AD0036FC30 /* HqWKWebView */,
 				15F0D73721B7B19D0036FC30 /* HqUIWebView */,
-				8E1471BF1FC900F700802E60 /* JSOC */,
 				8EDD18F81FC571A5006CA8B5 /* AppDelegate.h */,
 				8EDD18F21FC571A5006CA8B5 /* AppDelegate.m */,
 				8E3DF7121FC01060005AB32C /* www */,
@@ -384,7 +376,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 7V926B465U;
+				DEVELOPMENT_TEAM = C9F6VFYR26;
 				INFOPLIST_FILE = "OC-JS/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -399,7 +391,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 7V926B465U;
+				DEVELOPMENT_TEAM = C9F6VFYR26;
 				INFOPLIST_FILE = "OC-JS/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

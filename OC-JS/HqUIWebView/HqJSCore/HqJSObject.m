@@ -14,12 +14,20 @@
 
 - (void)completeOpen{
     //NSLog(@"completeOpen");
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"任务完成了" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
-    [alert show];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"任务完成了" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+        [alert show];
+    });
+
 }
 - (void)getUserInfo:(NSString *)name{
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"你的名字" message:name delegate:nil cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
-    [alert show];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"你的名字" message:name delegate:nil cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+        [alert show];
+    });
+
 }
 
 - (void)showAlert:(NSString *)title msg:(NSString *)msg buttonTitle:(NSString *)btnTitle{

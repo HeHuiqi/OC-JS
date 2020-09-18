@@ -16,6 +16,7 @@ typedef void(^HqHandlerBlock)(NSString*messageId,id params);
 @property (nonatomic,copy) HqHandlerBlock hqHandlerBlock;
 @property (nonatomic,strong) WKUserContentController *userContentController;
 @property (nonatomic,strong) WKWebView *webView;
+@property(nonatomic,assign) BOOL isDealJsReqquest;
 
 - (void)hqJsHandlerWithWebView:(WKWebView *)webView;
 - (void)callbackJsWithResponse:(id)response;

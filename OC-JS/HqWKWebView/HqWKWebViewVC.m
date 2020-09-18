@@ -17,6 +17,7 @@
 @property (nonatomic,strong) WKWebView *webView;
 @property (nonatomic,strong) WKWebViewConfiguration *config;
 @property (nonatomic,strong) HqHandler *hqHandler;
+@property(nonatomic,strong) UIActivityIndicatorView *indicatorView;
 
 @end
 
@@ -39,7 +40,13 @@
     
 }
 
-
+- (UIActivityIndicatorView *)indicatorView{
+    if (!_indicatorView) {
+        _indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:(UIActivityIndicatorViewStyleGray)];
+        _indicatorView.center = self.view.center;
+    }
+    return _indicatorView;
+}
 - (WKWebView *)webView{
     if (!_webView) {
         WKWebViewConfiguration *config = [[WKWebViewConfiguration alloc] init];
@@ -82,8 +89,9 @@
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL fileURLWithPath:path]];
     [self.webView loadRequest:request];
     [self.view addSubview:self.webView];
+    [self.view addSubview:self.indicatorView];
     
-    [self deleteCache];
+//    [self deleteCache];
     
     //处理事件
     __weak typeof(self) weakSelf = self;
@@ -94,7 +102,21 @@
         if ([messageId isEqualToString:HqGetUserInfo]) {
             [weakSelf hqGetUserInfo:params];
         }else{
-            [weakSelf.hqHandler callbackJsWithResponse:@{@"data":@"life good!"}];
+            //处理有callback的情况
+            if (weakSelf.hqHandler.isDealJsReqquest) {
+                //正在处理，防止js端重复提交
+                return;
+            }
+            weakSelf.hqHandler.isDealJsReqquest = YES;
+            //模拟处理数据
+            [weakSelf.indicatorView startAnimating];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                //处理完了，向js传递结果
+                [weakSelf.hqHandler callbackJsWithResponse:@{@"data":@"life good!"}];
+                [weakSelf.indicatorView stopAnimating];
+                weakSelf.hqHandler.isDealJsReqquest = NO;
+
+            });
         }
         
     };

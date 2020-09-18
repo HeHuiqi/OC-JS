@@ -34,9 +34,7 @@
             self.hqHandlerBlock(msgId, params);
         }
     }else{
-        NSLog(@"message.name=%@",message.name);
-        NSLog(@"message.body=%@",message.body);
-
+        NSLog(@"message.method=%@,data=%@",message.name,message.body);
     }
 }
 
@@ -46,8 +44,10 @@
     NSString *jsonStr = [[NSString alloc] initWithData:json encoding:NSUTF8StringEncoding];
     NSString *callBack = [NSString stringWithFormat:@"HqJsHandler.jsCallback(%@);",jsonStr];
     [self.webView evaluateJavaScript:callBack completionHandler:^(id _Nullable resp , NSError * _Nullable error) {
-//        NSLog(@"resp==%@",resp);
-//        NSLog(@"error==%@",error);
+        if (error != nil) {
+            NSLog(@"resp==%@",resp);
+            NSLog(@"error==%@",error);
+        }
     }];
     
 }
