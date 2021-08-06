@@ -26,8 +26,11 @@ typedef void(^HqHandlerBlock)(NSString*messageId,id params);
 @property(nonatomic,assign) BOOL isDealJsRequest;
 
 + (HqJsHandler *)jsHandlerWithWebView:(WKWebView *)webView;
+
 - (void)callbackJsWithDic:(NSDictionary *)dic;
+
 - (void)showLog;
+//一定要在使用的类的delloc方法中调用，否则不会释放该类对象
 - (void)removeAllScriptMessageHandlers;
 
 @end

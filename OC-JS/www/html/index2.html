@@ -41,7 +41,7 @@
             HqJsHandler.callNative("homeList", {
                 "pageCount": 10
             }, function (response) {
-                let resp = JSON.stringify(response)
+                let resp = JSON.stringify(response);
                 console.log("resp:"+resp);
                 alert("JsAlert-native-resp:"+resp);
             });

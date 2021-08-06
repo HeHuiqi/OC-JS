@@ -78,6 +78,7 @@
     
     NSData *json = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:nil];
     NSString *jsonStr = [[NSString alloc] initWithData:json encoding:NSUTF8StringEncoding];
+    //向js传递数据统一用json字符串
     NSString *callBack = [NSString stringWithFormat:@"HqJsHandler.onNativeCallback(%@);",jsonStr];
     [self.webView evaluateJavaScript:callBack completionHandler:^(id _Nullable resp , NSError * _Nullable error) {
         if (error != nil) {
@@ -109,11 +110,13 @@
     */
 }
 - (void)removeAllScriptMessageHandlers{
+    
+    //移除Handler时会出现一些系统打印的错误log，暂时不用管
+    [self.userContentController removeScriptMessageHandlerForName:HqJsHanderName];
     if (self.isShowLog) {
         [self.userContentController removeScriptMessageHandlerForName:@"log"];
         [self.userContentController removeScriptMessageHandlerForName:@"error"];
     }
-    [self.userContentController removeScriptMessageHandlerForName:HqJsHanderName];
 }
 
 @end
