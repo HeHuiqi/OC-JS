@@ -5,10 +5,10 @@ var HqJsHandler = {
                "params": params,
            };
         if (callBack) {
-            this.jsCallback = callBack;
+            this.onNativeCallback = callBack;
         }
         window.webkit.messageHandlers.HqJsHandler.postMessage(pass);
     },
-    jsCallback: function (data) {},
+    onNativeCallback: function (data) {},
 };
 window.HqJsHandler = HqJsHandler;

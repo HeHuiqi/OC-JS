@@ -24,10 +24,10 @@
 </head>
 
 <body>
-    <button type="button" class="btn">js调用原生方法</button>
+    <button type="button" class="btn">js调用仅Native方法</button>
     <br>
     <br>
-    <button type="button" class="btn2">js调用原生方法2</button>
+    <button type="button" class="btn2">js调用Native方法并监听回调</button>
 
 
     <script type="text/javascript">
@@ -43,7 +43,7 @@
             }, function (response) {
                 let resp = JSON.stringify(response)
                 console.log("resp:"+resp);
-                alert("JsAlert-native:"+resp);
+                alert("JsAlert-native-resp:"+resp);
             });
 
         });

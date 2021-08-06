@@ -11,7 +11,8 @@
 		15F0D73E21B7B1F90036FC30 /* HqWKWebViewVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 15F0D73D21B7B1F90036FC30 /* HqWKWebViewVC.m */; };
 		15F0D74221B7B24F0036FC30 /* HqWebVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 15F0D74121B7B24F0036FC30 /* HqWebVC.m */; };
 		15F0D74921B8DF760036FC30 /* HqJsHandler.js in Resources */ = {isa = PBXBuildFile; fileRef = 15F0D74821B8DF760036FC30 /* HqJsHandler.js */; };
-		15F0D74F21B8FD9A0036FC30 /* HqHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 15F0D74E21B8FD9A0036FC30 /* HqHandler.m */; };
+		15F0D74F21B8FD9A0036FC30 /* HqJsHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 15F0D74E21B8FD9A0036FC30 /* HqJsHandler.m */; };
+		3390410A255012D7004C97FB /* WKUserContentController+HqAddUserScript.m in Sources */ = {isa = PBXBuildFile; fileRef = 33904109255012D7004C97FB /* WKUserContentController+HqAddUserScript.m */; };
 		8E1471C51FC9012A00802E60 /* HqJSObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E1471C41FC9012A00802E60 /* HqJSObject.m */; };
 		8E3DF7011FC00D5C005AB32C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E3DF6FF1FC00D5C005AB32C /* Main.storyboard */; };
 		8E3DF7031FC00D5C005AB32C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8E3DF7021FC00D5C005AB32C /* Assets.xcassets */; };
@@ -30,8 +31,10 @@
 		15F0D74021B7B24F0036FC30 /* HqWebVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HqWebVC.h; sourceTree = "<group>"; };
 		15F0D74121B7B24F0036FC30 /* HqWebVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HqWebVC.m; sourceTree = "<group>"; };
 		15F0D74821B8DF760036FC30 /* HqJsHandler.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = HqJsHandler.js; sourceTree = "<group>"; };
-		15F0D74D21B8FD9A0036FC30 /* HqHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HqHandler.h; sourceTree = "<group>"; };
-		15F0D74E21B8FD9A0036FC30 /* HqHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HqHandler.m; sourceTree = "<group>"; };
+		15F0D74D21B8FD9A0036FC30 /* HqJsHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HqJsHandler.h; sourceTree = "<group>"; };
+		15F0D74E21B8FD9A0036FC30 /* HqJsHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HqJsHandler.m; sourceTree = "<group>"; };
+		33904108255012D7004C97FB /* WKUserContentController+HqAddUserScript.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WKUserContentController+HqAddUserScript.h"; sourceTree = "<group>"; };
+		33904109255012D7004C97FB /* WKUserContentController+HqAddUserScript.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "WKUserContentController+HqAddUserScript.m"; sourceTree = "<group>"; };
 		8E1471C31FC9012A00802E60 /* HqJSObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HqJSObject.h; sourceTree = "<group>"; };
 		8E1471C41FC9012A00802E60 /* HqJSObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HqJSObject.m; sourceTree = "<group>"; };
 		8E3DF6F61FC00D5B005AB32C /* OC-JS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OC-JS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -91,8 +94,10 @@
 			isa = PBXGroup;
 			children = (
 				15F0D74821B8DF760036FC30 /* HqJsHandler.js */,
-				15F0D74D21B8FD9A0036FC30 /* HqHandler.h */,
-				15F0D74E21B8FD9A0036FC30 /* HqHandler.m */,
+				15F0D74D21B8FD9A0036FC30 /* HqJsHandler.h */,
+				15F0D74E21B8FD9A0036FC30 /* HqJsHandler.m */,
+				33904108255012D7004C97FB /* WKUserContentController+HqAddUserScript.h */,
+				33904109255012D7004C97FB /* WKUserContentController+HqAddUserScript.m */,
 			);
 			path = HqHandler;
 			sourceTree = "<group>";
@@ -235,9 +240,10 @@
 				8E3DF7091FC00D5C005AB32C /* main.m in Sources */,
 				15F0D74221B7B24F0036FC30 /* HqWebVC.m in Sources */,
 				8EDD18FB1FC571A6006CA8B5 /* AppDelegate.m in Sources */,
-				15F0D74F21B8FD9A0036FC30 /* HqHandler.m in Sources */,
+				15F0D74F21B8FD9A0036FC30 /* HqJsHandler.m in Sources */,
 				15F0D73B21B7B1E20036FC30 /* HqUIWebViewVC.m in Sources */,
 				15F0D73E21B7B1F90036FC30 /* HqWKWebViewVC.m in Sources */,
+				3390410A255012D7004C97FB /* WKUserContentController+HqAddUserScript.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

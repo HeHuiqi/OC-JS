@@ -8,20 +8,31 @@
 
 #import "HqWKWebViewVC.h"
 #import <WebKit/WebKit.h>
-#import "HqHandler.h"
+#import "HqJsHandler.h"
+#import "WKUserContentController+HqAddUserScript.h"
 
-#define HqGetUserInfo @"userInfo"
+#define HqGetUserInfoMsgId @"userInfo"
+#define HqGetHomeListMsgId @"homeList"
 
 @interface HqWKWebViewVC ()<WKUIDelegate,WKNavigationDelegate>
 
 @property (nonatomic,strong) WKWebView *webView;
 @property (nonatomic,strong) WKWebViewConfiguration *config;
-@property (nonatomic,strong) HqHandler *hqHandler;
+@property (nonatomic,strong) HqJsHandler *jsHandler;
 @property(nonatomic,strong) UIActivityIndicatorView *indicatorView;
 
 @end
 
 @implementation HqWKWebViewVC
+
+- (void)dealloc{
+    [self.jsHandler removeAllScriptMessageHandlers];
+    self.webView.navigationDelegate = nil;
+    self.webView.scrollView.delegate = nil;
+    self.webView = nil;
+    NSLog(@"HqWKWebViewVC-dealloc");
+
+}
 
 - (void)deleteCache{
     
@@ -50,6 +61,9 @@
 - (WKWebView *)webView{
     if (!_webView) {
         WKWebViewConfiguration *config = [[WKWebViewConfiguration alloc] init];
+        [config setValue:@"1" forKey:@"allowUniversalAccessFromFileURLs"];
+        [config.preferences setValue:@"1" forKey:@"allowFileAccessFromFileURLs"];
+        
         WKUserContentController *HqWKC = [[WKUserContentController alloc] init];
         config.userContentController = HqWKC;
         _webView = [[WKWebView alloc] initWithFrame:self.view.bounds configuration:config];
@@ -58,16 +72,16 @@
     }
     return _webView;
 }
-- (HqHandler *)hqHandler{
-    if (!_hqHandler) {
-        _hqHandler = [[HqHandler alloc] init];
-        [_hqHandler hqJsHandlerWithWebView:self.webView];
+- (HqJsHandler *)jsHandler{
+    if (!_jsHandler) {
+        _jsHandler = [HqJsHandler jsHandlerWithWebView:self.webView];
     }
-    return _hqHandler;
+
+    return _jsHandler;
 }
 - (void)hqGetUserInfo:(NSDictionary *)params{
     NSLog(@"获取用户信息");
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"获取信息" message:params[@"name"] delegate:nil cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Native获取到了信息" message:params[@"name"] delegate:nil cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
     [alert show];
 }
 #pragma mark - WKNavigationDelegate
@@ -92,36 +106,40 @@
     [self.view addSubview:self.indicatorView];
     
 //    [self deleteCache];
-    
     //处理事件
     __weak typeof(self) weakSelf = self;
-    self.hqHandler.hqHandlerBlock = ^(NSString * _Nonnull messageId, id  _Nonnull params) {
+    self.jsHandler.hqHandlerBlock = ^(NSString * _Nonnull messageId, id  _Nonnull params) {
         
         NSLog(@"Native正在处理......");
         //执行你Native端的处理逻辑然后根据需要回调js端
-        if ([messageId isEqualToString:HqGetUserInfo]) {
+        if ([messageId isEqualToString:HqGetUserInfoMsgId]) {
             [weakSelf hqGetUserInfo:params];
-        }else{
+            return;
+        }
+        if ([messageId isEqualToString:HqGetHomeListMsgId]) {
             //处理有callback的情况
-            if (weakSelf.hqHandler.isDealJsReqquest) {
+            if (weakSelf.jsHandler.isDealJsRequest) {
                 //正在处理，防止js端重复提交
                 return;
             }
-            weakSelf.hqHandler.isDealJsReqquest = YES;
+            weakSelf.jsHandler.isDealJsRequest = YES;
             //模拟处理数据
             [weakSelf.indicatorView startAnimating];
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 //处理完了，向js传递结果
-                [weakSelf.hqHandler callbackJsWithResponse:@{@"data":@"life good!"}];
+                NSDictionary *rspData = @{@"data":@"life good!"};
+                [weakSelf.jsHandler callbackJsWithDic:rspData];
                 [weakSelf.indicatorView stopAnimating];
-                weakSelf.hqHandler.isDealJsReqquest = NO;
+                //重置
+                weakSelf.jsHandler.isDealJsRequest = NO;
 
             });
+            return;
         }
         
     };
-    //显示js端的log
-    [self.hqHandler showLog:self.webView];
+    //显示js端的console.log()信息
+    [self.jsHandler showLog];
     
 }
 
