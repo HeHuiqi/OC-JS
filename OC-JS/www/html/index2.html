@@ -6,6 +6,10 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
     <script src="jquery-1.10.1.min.js"></script>
+
+
+
+
     <style type="text/css">
         .btn2,
         .btn {
@@ -28,22 +32,28 @@
     <br>
     <br>
     <button type="button" class="btn2">js调用Native方法并监听回调</button>
-
+    <script src="HqJsBridge.js"></script>
 
     <script type="text/javascript">
         $('.btn').click(function () {
-
-            //(messageId, params, callBack) callBack可不传递
-            HqJsHandler.callNative("userInfo", {"name": "王小二"});
+            
+            let callbackId = "userInfo"
+            let params = { "name": "王小二" }
+            let passNativeData = {"callbackId":callbackId,"params":params}
+            
+            //无回调
+            HqJsBridge.callNative(passNativeData)
         });
         $('.btn2').click(function () {
             //(messageId, params, callBack) callBack用于native端回调js
-            HqJsHandler.callNative("homeList", {
-                "pageCount": 10
-            }, function (response) {
-                let resp = JSON.stringify(response);
-                console.log("resp:"+resp);
-                alert("JsAlert-native-resp:"+resp);
+            
+            let callbackId = "homeList"
+            let params = { "name": "王小二" }
+            let passNativeData = {"callbackId":callbackId,"params":params}
+            
+            //有回调
+            HqJsBridge.callNative(passNativeData,function (response) {
+                  alert("JsAlert-native-callback:" + JSON.stringify(response));
             });
 
         });

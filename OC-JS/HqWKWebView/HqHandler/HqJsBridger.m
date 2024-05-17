@@ -6,15 +6,15 @@
 //  Copyright © 2018 macpro. All rights reserved.
 //
 
-#import "HqJsHandler.h"
+#import "HqJsBridger.h"
 #import "WKUserContentController+HqAddUserScript.h"
-@interface HqJsHandler()<WKScriptMessageHandler>
+@interface HqJsBridger()<WKScriptMessageHandler>
 
 @property (nonatomic,strong) WKUserContentController *userContentController;
 @property(nonatomic,assign) BOOL isShowLog;
 
 @end
-@implementation HqJsHandler
+@implementation HqJsBridger
 
 - (void)dealloc{
     NSLog(@"HqHandler-dealloc");
@@ -39,8 +39,8 @@
     }
     return self;
 }
-+ (HqJsHandler *)jsHandlerWithWebView:(WKWebView *)webView{
-    HqJsHandler *js = [[HqJsHandler alloc] _init];
++ (HqJsBridger *)jsHandlerWithWebView:(WKWebView *)webView{
+    HqJsBridger *js = [[HqJsBridger alloc] _init];
     [js configUserJsWithWebView:webView];
     return js;
 }
@@ -50,22 +50,21 @@
     self.webView = webView;
     self.userContentController = config.userContentController;
     
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"HqJsHandler" ofType:@"js"];
-    NSString *jsHandlerCode = [[NSString alloc] initWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
-    WKUserScript *usrScript = [[WKUserScript alloc] initWithSource:jsHandlerCode injectionTime:WKUserScriptInjectionTimeAtDocumentEnd forMainFrameOnly:YES];
-    [config.userContentController addUserScript:usrScript];
-    
+    //添加处理js消息的代理名称
     [config.userContentController addScriptMessageHandler:self name:HqJsHanderName];
 }
 - (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message{
+    NSLog(@"message.name:%@",message.name);
+    NSLog(@"message.body:%@",message.body);
+
     if ([message.name isEqualToString:HqJsHanderName]) {
-        NSString *msgId = message.body[HqMessageId];
         id params = message.body[HqParams];
-        if (self.hqHandlerBlock) {
-            self.hqHandlerBlock(msgId, params);
+        NSString *msgId = message.body[HqMessageId];
+        if (self.hqBridgeBlock) {
+            self.hqBridgeBlock(msgId, params);
         }
-        if ([self.delegate respondsToSelector:@selector(hqJsHandler:messageId:params:)] && self.delegate) {
-            [self.delegate hqJsHandler:self messageId:msgId params:params];
+        if ([self.delegate respondsToSelector:@selector(hqJsBridger:messageId:params:)] && self.delegate) {
+            [self.delegate hqJsBridger:self messageId:msgId params:params];
         }
     }else{
         if ([message.name isEqualToString:@"log"]) {
@@ -79,7 +78,9 @@
     NSData *json = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:nil];
     NSString *jsonStr = [[NSString alloc] initWithData:json encoding:NSUTF8StringEncoding];
     //向js传递数据统一用json字符串
-    NSString *callBack = [NSString stringWithFormat:@"HqJsHandler.onNativeCallback(%@);",jsonStr];
+    NSString *callBack = [NSString stringWithFormat:@"javascript:HqJsBridge.jsCallback(%@);",jsonStr];
+
+
     [self.webView evaluateJavaScript:callBack completionHandler:^(id _Nullable resp , NSError * _Nullable error) {
         if (error != nil) {
             NSLog(@"resp==%@",resp);
@@ -89,6 +90,20 @@
     }];
     
 }
+- (void)callbackJsWithDic:(NSDictionary *)dic callbackId:(NSString *)callbackId {
+    NSData *json = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:nil];
+    NSString *jsonStr = [[NSString alloc] initWithData:json encoding:NSUTF8StringEncoding];
+    //向js传递数据统一用json字符串
+    NSString *callBack = [NSString stringWithFormat:@"javascript:HqJsBridge.jsCallbacks['homeList'](%@);",jsonStr];
+    [self.webView evaluateJavaScript:callBack completionHandler:^(id _Nullable resp , NSError * _Nullable error) {
+        if (error != nil) {
+            NSLog(@"resp==%@",resp);
+            NSLog(@"error==%@",error);
+        }
+        
+    }];
+}
+
 - (void)showLog{
     [self.userContentController hqAddLogScript:self];
     [self.userContentController hqAddErrorScript:self];

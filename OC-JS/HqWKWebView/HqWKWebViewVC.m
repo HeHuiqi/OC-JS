@@ -8,18 +8,18 @@
 
 #import "HqWKWebViewVC.h"
 #import <WebKit/WebKit.h>
-#import "HqJsHandler.h"
+#import "HqJsBridger.h"
 #import "WKUserContentController+HqAddUserScript.h"
 
 #define HqGetUserInfoMsgId @"userInfo"
 #define HqGetHomeListMsgId @"homeList"
 
 @interface HqWKWebViewVC ()<WKUIDelegate,
-WKNavigationDelegate,HqJsHandlerDelegate>
+WKNavigationDelegate,HqJsBridgerDelegate>
 
 @property (nonatomic,strong) WKWebView *webView;
 @property (nonatomic,strong) WKWebViewConfiguration *config;
-@property (nonatomic,strong) HqJsHandler *jsHandler;
+@property (nonatomic,strong) HqJsBridger *jsHandler;
 @property(nonatomic,strong) UIActivityIndicatorView *indicatorView;
 
 @end
@@ -74,9 +74,9 @@ WKNavigationDelegate,HqJsHandlerDelegate>
     }
     return _webView;
 }
-- (HqJsHandler *)jsHandler{
+- (HqJsBridger *)jsHandler{
     if (!_jsHandler) {
-        _jsHandler = [HqJsHandler jsHandlerWithWebView:self.webView];
+        _jsHandler = [HqJsBridger jsHandlerWithWebView:self.webView];
     }
 
     return _jsHandler;
@@ -126,7 +126,7 @@ WKNavigationDelegate,HqJsHandlerDelegate>
 }
 
 #pragma mark - HqJsHandlerDelegate
-- (void)hqJsHandler:(HqJsHandler *)jsHandler messageId:(NSString *)messageId params:(id)params{
+- (void)hqJsBridger:(HqJsBridger *)jsHandler messageId:(NSString *)messageId params:(id)params{
     //对于接收到js的数据类型，自行协商处理
     [self dealJsInvokeWithMessageId:messageId params:params];
 }
@@ -149,7 +149,7 @@ WKNavigationDelegate,HqJsHandlerDelegate>
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             //处理完了，向js传递结果
             NSDictionary *rspData = @{@"data":@"life good!"};
-            [self.jsHandler callbackJsWithDic:rspData];
+            [self.jsHandler callbackJsWithDic:rspData callbackId:msgId];
             [self.indicatorView stopAnimating];
             //重置
             self.jsHandler.isDealJsRequest = NO;

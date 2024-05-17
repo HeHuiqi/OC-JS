@@ -10,24 +10,25 @@
 #import <UIKit/UIKit.h>
 #import <WebKit/WebKit.h>
 
-#define HqJsHanderName @"HqJsHandler"
-#define HqMessageId @"messageId"
+#define HqJsHanderName @"HqJsBridge"
+#define HqMessageId @"callbackId"
 #define HqParams @"params"
 
 NS_ASSUME_NONNULL_BEGIN
-typedef void(^HqHandlerBlock)(NSString*messageId,id params);
+typedef void(^HqBridgerBlock)(NSString*messageId,id params);
 
-@protocol HqJsHandlerDelegate;
-@interface HqJsHandler : NSObject
+@protocol HqJsBridgerDelegate;
+@interface HqJsBridger : NSObject
 
-@property (nonatomic,copy) HqHandlerBlock hqHandlerBlock;
-@property(nonatomic,weak) id<HqJsHandlerDelegate> delegate;
+@property (nonatomic,copy) HqBridgerBlock hqBridgeBlock;
+@property(nonatomic,weak) id<HqJsBridgerDelegate> delegate;
 @property (nonatomic,strong) WKWebView *webView;
 @property(nonatomic,assign) BOOL isDealJsRequest;
 
-+ (HqJsHandler *)jsHandlerWithWebView:(WKWebView *)webView;
++ (HqJsBridger *)jsHandlerWithWebView:(WKWebView *)webView;
 
 - (void)callbackJsWithDic:(NSDictionary *)dic;
+- (void)callbackJsWithDic:(NSDictionary *)dic callbackId:(NSString *)callbackId;
 
 - (void)showLog;
 //一定要在使用的类的delloc方法中调用，否则不会释放该类对象
@@ -35,10 +36,10 @@ typedef void(^HqHandlerBlock)(NSString*messageId,id params);
 
 @end
 
-@protocol HqJsHandlerDelegate <NSObject>
+@protocol HqJsBridgerDelegate <NSObject>
 
 @required
-- (void)hqJsHandler:(HqJsHandler *)jsHandler messageId:(NSString *)messageId params:(id)params;
+- (void)hqJsBridger:(HqJsBridger *)jsHandler messageId:(NSString *)messageId params:(id)params;
 
 @end
 

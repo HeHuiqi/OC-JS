@@ -25,7 +25,7 @@
     NSString *source = @"\
     (function () {\
         var abc = function(errormsg,url,line){\
-            var msg = '错误了1: ' + '{' + errormsg + '}' + 'url:' + url + '  Line:' + line;\
+            var msg = '错误了: ' + '{' + errormsg + '}' + 'url:' + url + '  Line:' + line;\
             console.log(msg);\
         };\
         window.onerror = abc;\
